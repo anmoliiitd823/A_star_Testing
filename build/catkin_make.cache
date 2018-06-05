@@ -1,0 +1,2 @@
+a_star
+-DCATKIN_DEVEL_PREFIX=/home/anmol/Desktop/A_star_Testing/devel -DCMAKE_INSTALL_PREFIX=/home/anmol/Desktop/A_star_Testing/install -G Unix Makefiles
