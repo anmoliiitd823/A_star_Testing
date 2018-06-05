@@ -30,7 +30,7 @@ void random_lane_costs(int** a){
 	int i=0;
 	while(i<MATRIX_LENGTH){
 		//cout<<i<<endl;
-		int temp_cost = rand()%3;
+		int temp_cost = rand()%2;
 		for(int j=i;j<i+LANE_WIDTH;j++){
 			for(int k=0;k<MATRIX_WIDTH;k++){
 				if(a[j][k]==0)

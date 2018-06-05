@@ -293,18 +293,19 @@ int main( int argc, char** argv )
     }
 
 
-    for (uint32_t i = 0; i < MAP_WIDTH; ++i)
-      for(uint32_t j = 0; j < MAP_HEIGHT ; ++j){
-        {
-          if(world_map[i+MAP_HEIGHT*j]!=0){
-            map123.data = v;
-            map123.info.resolution = 1;     //default =1                //resolution of map....m/cell | google "nav_msgs/MapMetaData" for more information
-            map123.info.width = MAP_WIDTH;               //default m_size                  
-            map123.info.height = MAP_HEIGHT;
-            map_pub.publish(map123);
-          }
-        }
-    }
+    // for (uint32_t i = 0; i < MAP_WIDTH; ++i)
+    //   for(uint32_t j = 0; j < MAP_HEIGHT ; ++j){
+    //     {
+    if(world_map[i+MAP_HEIGHT*j]!=0){
+      map123.data = v;
+      map123.info.resolution = 1;     //default =1                //resolution of map....m/cell | google "nav_msgs/MapMetaData" for more information
+      map123.info.width = MAP_WIDTH;               //default m_size                  
+      map123.info.height = MAP_HEIGHT;
+      map_pub.publish(map123);
+    } 
+    //       }
+    //     }
+    // }
     trajec.publish(Trajectory);
     //rviz_visual_tools::RvizVisualTools::deleteAllMarkers()
     r.sleep();
