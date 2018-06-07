@@ -40,10 +40,10 @@ int main(int argc, char **argv)
         matrix[i][j]=0.0;
       }
     }
-
-    generate_random_binary_matrix(a);
+    get_matrix_from_file(a);
+    //generate_random_binary_matrix(a);
     //weighted_matrix(a,matrix);
-    random_lane_costs(a);
+    //random_lane_costs(a);
     for(int i=0;i<MATRIX_LENGTH;i++){
       for(int j=0;j<MATRIX_WIDTH;j++){
         a[i][j] = a[i][j]+matrix[i][j];

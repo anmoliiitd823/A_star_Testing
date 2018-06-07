@@ -10,8 +10,40 @@ const int OBSTACLE_COST = 9;
 const int DIST_EFFECT_OBST = 3;
 const int LANE_WIDTH = 3;
 
+
+const char* INPUT_MATRIX_PATH = "/Users/anmol/Desktop/A_star_Testing/src/a_star/matrix.txt";
+
 float euclid_dist(int x1,int y1,int x2,int y2){
 	return sqrt(pow((x1-x2),2)+pow((y1-y2),2));
+}
+
+void get_matrix_from_file(int** a){
+	std::vector<std::vector<int> >     data;
+    std::ifstream file(INPUT_MATRIX_PATH,ios::in);
+    std::string line;
+    char next;
+	while(file.get(next))
+	{
+	    if (next == '\n')  
+	    {    break;        
+	    }                  
+	}
+    while(std::getline(file, line))
+    {
+        std::vector<int>   lineData;
+        std::stringstream  lineStream(line);
+        int value;
+        while(lineStream >> value)
+        {
+            lineData.push_back(value);
+        }
+        data.push_back(lineData);
+    }
+    for(int i=0;i<MATRIX_LENGTH;i++){
+    	for(int j=0;j<MATRIX_WIDTH;j++){
+    		a[i][j] = data[i][j];
+    	}
+    }
 }
 
 void generate_random_binary_matrix(int** a){

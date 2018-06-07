@@ -1,4 +1,5 @@
 #include "stlastar.h" // See header for copyright and usage information
+#include "get_goal.h"
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
@@ -25,8 +26,16 @@ const int MAP_HEIGHT = 500;
 //Weight of the obstacle
 const int OBSTACLE_COST = 9;
 
+//Path to matrix file
+const char* GOAL_PATH = "";
+
+//Path to Trajectory file
+const char* TRAJECTORY_FILE = "";
+
 //Path to the matrix.txt created by matrixnode in obstacle matrix
 const char* PATH_TO_MATRIX = "/home/anmol/Desktop/A_star_Testing/src/a_star/matrix.txt";
+
+const char* PATH_TO_TRAJECTORY = "";
 
 int world_map[ MAP_WIDTH * MAP_HEIGHT ];
 std::vector<signed char> v((MAP_WIDTH)*(MAP_HEIGHT),0); // A vector which will be used to store and processing points for occupancy grid visualizationm,
@@ -45,7 +54,7 @@ nav_msgs::OccupancyGrid map123;
 //********************************************************************************************************************
 
 //Trajectory message to be published at trajec topic
-visualization_msgs::Marker Trajectory; 
+//visualization_msgs::Marker Trajectory; 
 
 //Returns the cost at position (x,y)
 int GetMap( int x, int y )
@@ -83,23 +92,25 @@ bool MapSearchNode::IsSameState( MapSearchNode &rhs )
 void MapSearchNode::PrintNodeInfo()
 {
     // Adds all the required information of the trajectory node to trajectory msg and prints it at the console
-    Trajectory.header.frame_id= "/map";
-    Trajectory.header.stamp= ros::Time::now();
-    Trajectory.ns= "Trajectory";
-    Trajectory.action= visualization_msgs::Marker::ADD;
-    Trajectory.pose.orientation.w= 1.0;
-    Trajectory.id = 0;
-    Trajectory.type = visualization_msgs::Marker::CUBE_LIST;
-    Trajectory.scale.x = 0.5;
-    Trajectory.scale.y = 0.5;
-    Trajectory.scale.z = 0.0;
-    Trajectory.color.g = 1.0;
-    Trajectory.color.a = 1.0;
-    geometry_msgs::Point p;
-    p.x = x;
-    p.y = y;
-    p.z = 0;
-    Trajectory.points.push_back(p);
+    // Trajectory.header.frame_id= "/map";
+    // Trajectory.header.stamp= ros::Time::now();
+    // Trajectory.ns= "Trajectory";
+    // Trajectory.action= visualization_msgs::Marker::ADD;
+    // Trajectory.pose.orientation.w= 1.0;
+    // Trajectory.id = 0;
+    // Trajectory.type = visualization_msgs::Marker::CUBE_LIST;
+    // Trajectory.scale.x = 0.5;
+    // Trajectory.scale.y = 0.5;
+    // Trajectory.scale.z = 0.0;
+    // Trajectory.color.g = 1.0;
+    // Trajectory.color.a = 1.0;
+    // geometry_msgs::Point p;
+    // p.x = x;
+    // p.y = y;
+    // p.z = 0;
+
+    trajectory_file << x << " " << y << endl; 
+    //Trajectory.points.push_back(p);
     char str[100];
     sprintf( str, "Node position : (%d,%d)\n", x,y );
     cout << str;
@@ -199,6 +210,7 @@ int main( int argc, char** argv )
   {
     ros::spinOnce();
 
+    ofstream trajectory_file(TRAJECTORY_FILE,std::ofstream::out);
   // Create an instance of the search class...
     AStarSearch<MapSearchNode> astarsearch;
     unsigned int SearchCount = 0;
@@ -216,7 +228,8 @@ int main( int argc, char** argv )
         // Define the goal state
         MapSearchNode nodeEnd;
         nodeEnd.x = 0;           
-        nodeEnd.y = 0; 
+        nodeEnd.y = 0;
+        get_goal_from_file(nodeEnd.x,nodeEnd.y,GOAL_PATH) 
         //Make the end state obstacle free
         world_map[nodeEnd.x+MAP_HEIGHT*nodeEnd.y]=0;
 
@@ -296,7 +309,8 @@ int main( int argc, char** argv )
     map123.info.width = MAP_WIDTH;               //default m_size                  
     map123.info.height = MAP_HEIGHT;
     map_pub.publish(map123); 
-    trajec.publish(Trajectory);
+    //trajec.publish(Trajectory);
+    trajectory_file.close();
     //rviz_visual_tools::RvizVisualTools::deleteAllMarkers()
     r.sleep();
   }
