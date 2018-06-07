@@ -39,9 +39,15 @@ void get_matrix_from_file(int** a){
         }
         data.push_back(lineData);
     }
+    for(int i=0;i<data.size();i++){
+    	for(int j=0;j<data[i].size();j++){
+    		cout<<data[i][j]<<" ";
+    	}
+    	cout<<endl;
+    }
     for(int i=0;i<MATRIX_LENGTH;i++){
     	for(int j=0;j<MATRIX_WIDTH;j++){
-    		a[i][j] = data[i][j];
+    		a[i][j] = 0;
     	}
     }
 }

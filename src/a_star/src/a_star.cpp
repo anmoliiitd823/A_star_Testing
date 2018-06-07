@@ -20,8 +20,8 @@
 using namespace std;
 
 //Size of the Map
-const int MAP_WIDTH = 500;
-const int MAP_HEIGHT = 500;
+const int MAP_WIDTH = 501;
+const int MAP_HEIGHT = 501;
 
 //Weight of the obstacle
 const int OBSTACLE_COST = 9;
@@ -77,7 +77,7 @@ public:
   bool GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapSearchNode *parent_node );
   float GetCost( MapSearchNode &successor );
   bool IsSameState( MapSearchNode &rhs );
-  void PrintNodeInfo(); 
+  void PrintNodeInfo(ofstream &trajectory_file); 
 };
 
 bool MapSearchNode::IsSameState( MapSearchNode &rhs )
@@ -89,7 +89,7 @@ bool MapSearchNode::IsSameState( MapSearchNode &rhs )
   return false;
 }
 
-void MapSearchNode::PrintNodeInfo()
+void MapSearchNode::PrintNodeInfo(ofstream &trajectory_file)
 {
     // Adds all the required information of the trajectory node to trajectory msg and prints it at the console
     // Trajectory.header.frame_id= "/map";
@@ -229,7 +229,7 @@ int main( int argc, char** argv )
         MapSearchNode nodeEnd;
         nodeEnd.x = 0;           
         nodeEnd.y = 0;
-        get_goal_from_file(nodeEnd.x,nodeEnd.y,GOAL_PATH) 
+        get_goal_from_file(nodeEnd.x,nodeEnd.y,GOAL_PATH); 
         //Make the end state obstacle free
         world_map[nodeEnd.x+MAP_HEIGHT*nodeEnd.y]=0;
 
@@ -254,7 +254,7 @@ int main( int argc, char** argv )
                 {
                   len++;
                   #if !DEBUG_LIST_LENGTHS_ONLY      
-                    ((MapSearchNode *)p)->PrintNodeInfo();
+                    ((MapSearchNode *)p)->PrintNodeInfo(ofstream &trajectory_file);
                   #endif
                   p = astarsearch.GetOpenListNext();    
                 }
@@ -266,7 +266,7 @@ int main( int argc, char** argv )
                 {
                     len++;
                     #if !DEBUG_LIST_LENGTHS_ONLY      
-                        p->PrintNodeInfo();
+                        p->PrintNodeInfo(ofstream &trajectory_file);
                     #endif      
                     p = astarsearch.GetClosedListNext();
                 }
@@ -283,13 +283,13 @@ int main( int argc, char** argv )
                   cout << "Displaying solution\n";
             #endif
             int steps = 0;
-            node->PrintNodeInfo();
+            node->PrintNodeInfo(trajectory_file);
             for( ;; )
             {
                 node = astarsearch.GetSolutionNext();
                 if( !node )
                     break;
-                node->PrintNodeInfo();
+                node->PrintNodeInfo(trajectory_file);
                 steps ++;
             };
             cout << "Solution steps " << steps << endl;
