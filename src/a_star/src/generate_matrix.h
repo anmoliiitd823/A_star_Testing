@@ -11,7 +11,7 @@ const int DIST_EFFECT_OBST = 3;
 const int LANE_WIDTH = 3;
 
 
-const char* INPUT_MATRIX_PATH = "/Users/anmol/Desktop/A_star_Testing/src/a_star/matrix.txt";
+const char* INPUT_MATRIX_PATH = "";
 
 float euclid_dist(int x1,int y1,int x2,int y2){
 	return sqrt(pow((x1-x2),2)+pow((y1-y2),2));
@@ -40,10 +40,7 @@ void get_matrix_from_file(int** a){
         data.push_back(lineData);
     }
     for(int i=0;i<data.size();i++){
-    	for(int j=0;j<data[i].size();j++){
-    		cout<<data[i][j]<<" ";
-    	}
-    	cout<<endl;
+    	cout<<data.size()<<" "<<data[i].size()<<endl;
     }
     for(int i=0;i<MATRIX_LENGTH;i++){
     	for(int j=0;j<MATRIX_WIDTH;j++){
